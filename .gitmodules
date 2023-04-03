@@ -1,0 +1,3 @@
+[submodule "assignment/techCompany/frontend"]
+	path = assignment/techCompany/frontend
+	url = https://github.com/chacachiene/web-programming-hcmut/tree/master/assignment/techCompany
