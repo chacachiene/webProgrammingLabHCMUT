@@ -9,6 +9,8 @@ import  Layout  from "scenes/layout";
 import CreateUser from "components/CreateUser";
 import ListUser from "components/ListUser";
 import EditUser from "components/EditUser";
+import ListProduct from "components/product/ListProduct";
+import CreateProduct from "components/product/CreateProduct";
 function App(){
     const mode = useSelector((state) => state.global.mode);
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -22,6 +24,8 @@ function App(){
                         <Route element={<Layout />}>
                             <Route path="/" element={<Navigate to='/dashboard' replace />} />
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/product" element={<ListProduct />} />
+                            <Route path="/product/create" element={<CreateProduct />} />
                             <Route path= "/user/create" element={<CreateUser />} />
                             <Route path= "/user/listuser" element={<ListUser />} />
                             <Route path= "/user/:id/edituser" element={<EditUser />} />

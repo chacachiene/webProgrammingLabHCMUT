@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body>
+    <h1 id="h1">Welcome to the program</h1>
+          <!-- Navbar -->
+          <nav class="navbar navbar-expand-lg navbar-light bg-info" style="margin-bottom: 10px;">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">List Product</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        <div class="container">
+
+            <div style="display: flexbox; width: 100%; margin: 10px;">
+                <form>
+                    <div class="form-row" style="margin-bottom: 10px;">
+                      <div class="form-group col-md-12">
+                        <label for="ftitle">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value= "" />
+                      </div>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 10px;">
+                      <div class="form-group col-md-12">
+                        <label for="ftitle">Value</label>
+                        <input type="text" class="form-control" id="value" name="value" value= "" />
+                      </div>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 10px;">
+                        <div class="form-group col-md-12">
+                          <label for="ftitle">Day expire</label>
+                          <input type="number" class="form-control" id="exdays" name="exdays" value= "" />
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary" onclick="setCookie()">Create</button>
+                </form>
+            </div>
+          <!-- Button -->
+         <button type="button" class="btn btn-primary" onclick="getAllCookie()">get all Cookie</button>
+          <!-- Table with Button -->
+          <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Expiration</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <th scope="row"></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>              
+            </tbody>
+          </table>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="script.js" tyle="text/javascript"></script>
+</body>
+</html>

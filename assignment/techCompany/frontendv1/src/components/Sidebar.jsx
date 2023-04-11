@@ -50,7 +50,7 @@ const navItems = [
         icon: <ShoppingCartOutlined/>,
     },
     {
-        name: "Customers",
+        name: "Users",
         icon: <Groups2Outlined />,
     },
     {
@@ -58,15 +58,11 @@ const navItems = [
         icon: <ReceiptLongOutlined />,
     },
     {
-        name: "Function",
+        name: "Sale",
         icon: null,
     },
     {
-        name: "Geography",
-        icon: <PublicOutlined />,
-    },
-    {
-        name: "Sale",
+        name: "Product",
         icon: <PointOfSaleOutlined />,
     },
     {
@@ -104,7 +100,7 @@ const Sidebar = ({
     const theme = useTheme();
     const {pathname} = useLocation();
     const navigate = useNavigate();
-    const [active, setActive] = useState(""); 
+    const [active, setActive] = useState(''); 
 
 
     useEffect(() => {
@@ -127,11 +123,11 @@ const Sidebar = ({
                     boxSizing: "border-box",
                     color: theme.palette.secondary[200],
                     backgroundColor: theme.palette.background.alt,
-                    borderWidth: isPc ? "0px" : "2px",
+                    borderWidth: isPc ? "0px" : "1px",
                 }
             }}>
                 <Box width ="100%">
-                    <Box m="1.5rem 2rem 2rem 3rem">
+                    <Box m="1.5rem 1rem 1rem 4rem">
                         <FlexBetween color={theme.palette.secondary.main}>
                             <Box display="flex" alignItems = "center" gap= "0.5rem">
                                 <Typography variant = "h4" fontWeight="bold">
@@ -149,7 +145,7 @@ const Sidebar = ({
                                 {navItems.map(({name, icon}) => {
                                     if(!icon){
                                         return (
-                                            <Typography key = {name} sx={{m: "2.25rem 0 1rem 3rem"}}>
+                                            <Typography key = {name} m= "2.25rem 0 1rem 3rem">
                                             {name}
                                             </Typography>   
 
@@ -165,13 +161,13 @@ const Sidebar = ({
                                                     setActive(lcText);
                                                 }}
                                                 sx={{
-                                                    color: active === lcText ? theme.palette.primary[600] : theme.palette.secondary[200],
-                                                   
+                                                    color: active === lcText ? theme.palette.primary[1000] : theme.palette.secondary[200],
+                                                    backgroundColor: active === lcText ? theme.palette.secondary[600]: "transparent",
                                                     "&:hover": {
                                                         backgroundColor: theme.palette.primary[50],
                                                     },
                                                     "&.Mui-selected": {
-                                                        backgroundColor: theme.palette.primary[50],
+                                                        backgroundColor: theme.palette.secondary[100],
                                                         color: theme.palette.primary[600],
                                                     },
                                                 }}  
@@ -187,7 +183,7 @@ const Sidebar = ({
                                                 </ListItemIcon>
                                                 <ListItemText primary={name} />
                                                 {active === lcText && (
-                                                    <ChevronRightOutlined sx= {{ ml: "auto"}}/>
+                                                    <ChevronRightOutlined  ml= "auto"/>
                                                 )}
                                             </ListItemButton>
 
