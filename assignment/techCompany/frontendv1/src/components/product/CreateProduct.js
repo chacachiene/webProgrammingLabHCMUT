@@ -15,16 +15,18 @@ function CreateProduct() {
         description: ''
     })
     const handleChange = (e) => {
+      
         const { name, value } = e.target;
         setProduct({ ...product, [name]: value })
     }
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(product);
-        axios.post('http://localhost:80/api/product/save', product );
+        axios.post('http://localhost:80/api/product/index.php', product ).then(function(response){
+            console.log(response.data);
+            navigate('/product');
+        });
     }
-
-
   return (
     <div>
     <h1>Creat Product</h1>
@@ -42,7 +44,7 @@ function CreateProduct() {
           <label>Description </label>
           <input type="text" required name="description" onChange={handleChange} className="form-control" />
           <br />
-          <Button variant="outlined" type="submit">Outlined</Button>
+          <Button variant="outlined" type="submit">submit</Button>
         </div>
 
       </form>
