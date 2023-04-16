@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PRO_API_URL = "http://localhost:80/api/product/index.php";
+const PRO_API_URL = "http://localhost:80/api/product/index.php"; //index.php
 
 
 export const getProducts = async() =>{
@@ -24,6 +24,7 @@ export const createProduct = async (product)=>{
 export const getProductById = async (productId) =>{
     try{
         const response = await axios.get(PRO_API_URL + '/' + productId);
+        console.log(PRO_API_URL + '/' + productId);
         return response.data;
     } catch(error){
         console.log(error);
@@ -31,9 +32,9 @@ export const getProductById = async (productId) =>{
     }
 }
 
-export const updateProduct= async (product, productId) =>{
+export const updateProduct= async (productId, product) =>{
     try{
-        const response = await axios.put(PRO_API_URL + '/' + productId, product);
+        const response = await axios.put(PRO_API_URL + '/' + productId+'/edit', product);
         return response.data;
     } catch(error){
         console.log(error);
@@ -41,9 +42,11 @@ export const updateProduct= async (product, productId) =>{
     }
 }
 
-export const deleteProduct = async (productId)=>{
+export const deleteProduct = async (productIds)=>{
     try{
-        const response = await axios.delete(PRO_API_URL + '/' + productId);
+        
+        const response = await axios.delete(PRO_API_URL + '/' + productIds+'/delete');
+        //console.log(response);
         return response.data;
     } catch(error){
         console.log(error);

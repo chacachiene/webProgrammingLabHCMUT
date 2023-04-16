@@ -11,6 +11,7 @@ import ListUser from "components/ListUser";
 import EditUser from "components/EditUser";
 import ListProduct from "components/product/ListProduct";
 import CreateProduct from "components/product/CreateProduct";
+import EditProduct from "components/product/EditProduct";
 function App(){
     const mode = useSelector((state) => state.global.mode);
     const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -26,6 +27,7 @@ function App(){
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/product" element={<ListProduct />} />
                             <Route path="/product/create" element={<CreateProduct />} />
+                            <Route path="/product/:id/edit" element={<EditProduct />} />
                             <Route path= "/user/create" element={<CreateUser />} />
                             <Route path= "/user/listuser" element={<ListUser />} />
                             <Route path= "/user/:id/edituser" element={<EditUser />} />

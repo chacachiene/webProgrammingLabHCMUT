@@ -2,30 +2,30 @@ import { Button, Box, Table, TableBody, TableCell, TableContainer, TableHead, Ta
           TableRow, TableSortLabel, Toolbar, Typography, Paper, Checkbox, IconButton, Tooltip,
           FormControlLabel, Switch } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditOutlined from '@mui/icons-material/EditOutlined';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {useLocation, useNavigate, useState} from 'react-router-dom';
+import {useLocation, useNavigate, useParams, useState} from 'react-router-dom';
 import axios from 'axios';
-import { AllOut } from '@mui/icons-material';
-import { createProduct, getProductById, getProducts } from 'services/productService';
+import { AllOut, ConstructionOutlined } from '@mui/icons-material';
+import { createProduct, getProductById, getProducts, deleteProduct } from 'services/productService';
 
 function createData(
   id,
   name,
   price,
   quantity,
-  description,
-  image
+  description
 ){
-  return { id, name, price, quantity, description, image };
+  return { id, name, price, quantity, description };
 }
 
-var rows=[
-  createData('1', "iphone 13",10000, 10, "this is a good","ch co")
-]
-rows.push(  createData('2', "iphone 14",10000, 10, "this is a good","ch co"))
+// var rows=[
+//   createData('1', "iphone 13",10000, 10, "this is a good","ch co")
+// ]
+// rows.push(  createData('2', "iphone 14",10000, 10, "this is a good","ch co"))
 
 
 function descendingComparator(a, b, orderBy){
@@ -76,22 +76,24 @@ const headCells= [
     disablePadding: false,
     label: 'Price (VND)',
   },
-  {
-    id: 'description',
-    numeric: true,
-    disablePadding: false,
-    label: 'Description',
-  },
+  
   {
     id: 'quantity',
     numeric: true,
     disablePadding: false,
     label: 'Quantity (cái)',
   },
+  {
+    id: 'description',
+    numeric: true,
+    disablePadding: false,
+    label: 'Description',
+  },
 ];
 const DEFAULT_ORDER = 'asc';
 const DEFAULT_ORDER_BY = 'id';
 const DEFAULT_ROWS_PER_PAGE = 5;
+
 
 const EnhancedTableHead = (props) => {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
@@ -144,7 +146,22 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 function EnhancedTableToolbar(props){
-  const {numSelected} = props;
+  const {numSelected, ids} = props;
+  const navigate = useNavigate();
+  const handleEdit = () => {
+    if(ids.length>2){
+      alert("Chỉ được chọn 1 sản phẩm để sửa");  // will replace with another alert later if have time
+      navigate('/product');
+    } else{
+      navigate(`/product/${ids}/edit`); 
+    }
+  }
+  const handleDelete = () =>{
+    deleteProduct(ids);
+    console.log("aaa");
+    window.location.href = '/product';
+  }
+  
   return (
     <Toolbar
       sx={{
@@ -178,28 +195,35 @@ function EnhancedTableToolbar(props){
         </Typography>
       )}
       {numSelected > 0 ? (
+        <>
+        <Tooltip title="edit">
+          <IconButton onClick={handleEdit}>
+            <EditOutlined />
+          </IconButton>
+        </Tooltip>
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <DeleteIcon />
-           </IconButton>
+          </IconButton>
+        </Tooltip></>) : (
+        <Tooltip title="Filter list">
+          <IconButton>
+            <FilterListIcon />
+            </IconButton>
             </Tooltip>
-            ) : (
-              <Tooltip title="Filter list">
-                <IconButton>
-                  <FilterListIcon />
-                  </IconButton>
-                  </Tooltip>
                   )}
       </Toolbar>
     );
 }
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  ids: PropTypes.string.isRequired
 }
 
 const ListProduct = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [rows, setRows] = React.useState([]); 
   const [order, setOrder] = React.useState(DEFAULT_ORDER);
   const [orderBy, setOrderBy] = React.useState(DEFAULT_ORDER_BY);
   const [selected, setSelected] = React.useState([]);
@@ -209,34 +233,31 @@ const ListProduct = () => {
   const [paddingHeight, setPaddingHeight] = React.useState(0);
   const [dense, setDense] = React.useState(false);
 
-  const [products, setProducts] = React.useState({});
-  const [rows, setRows] = React.useState([]);
+
+
   React.useEffect(() => {
     async function fetchData() {
       try {
         const response = await getProducts();
-        console.log(response);
         const newData = response.map((product) => {
-          return createData(product.id, product.name, product.price, product.quantity, product.description, product.image);
+          return createData(product.id, product.name, product.price, product.amount, product.description, product.image);
         });
         setRows(newData);
-        console.log(newData);
-
       } catch (error) {
         console.error(error);
       }
     }
     fetchData();
   }, []);
-  React.useEffect( ()=> {
-    
-    let RowOnMount = stableSort(
-      rows,
-      getComparator(DEFAULT_ORDER, DEFAULT_ORDER_BY),
-    );
-    RowOnMount = RowOnMount.slice(0* DEFAULT_ROWS_PER_PAGE, 0*DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE);
-    setVisibleRows(RowOnMount);
-  }, []);
+
+React.useEffect( ()=> {
+  let RowOnMount = stableSort(
+    rows,
+    getComparator(DEFAULT_ORDER, DEFAULT_ORDER_BY),
+  );
+  RowOnMount = RowOnMount.slice(0* DEFAULT_ROWS_PER_PAGE, 0*DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE);
+  setVisibleRows(RowOnMount);
+}, []);
 const handleRequestSort = React.useCallback(
   (event, newOrderBy) => {
     const isAsc = orderBy === newOrderBy && order === 'asc'; //careful
@@ -260,11 +281,11 @@ const handleSelectAllClick = (event)=>{
   }
   setSelected([]);
 }
-const handleClick = (event, name) =>{
-  const selectedIndex = selected.indexOf(name);
+const handleClick = (event, id) =>{
+  const selectedIndex = selected.indexOf(id);
   let newSelected = [];
   if(selectedIndex === -1){
-    newSelected = newSelected.concat(selected, name);
+    newSelected = newSelected.concat(selected, id);
   } else if(selectedIndex === 0 ){
     newSelected = newSelected.concat(selected.slice(1));
   } else if( selectedIndex === selected.length -1 ){
@@ -306,7 +327,9 @@ const handleRowsPage = React. useCallback(
 const handleChangeDense = (event) => {
   setDense(event.target.checked);
 };
-const isSelected = (name) => selected.indexOf(name) !== -1;
+const isSelected = (id) => selected.indexOf(id) !== -1; //careful
+
+//careful
 
   return (
     <div>
@@ -314,7 +337,7 @@ const isSelected = (name) => selected.indexOf(name) !== -1;
         <Button onClick={() =>{navigate('/product/create')} }>Add new product</Button>
         <Box sx={{width: '100%'}}>
           <Paper sx={{width: '100%', mb: 2}}>
-            <EnhancedTableToolbar numSelected={selected.length} />
+            <EnhancedTableToolbar numSelected={selected.length} ids={selected.join(',')} />
             <TableContainer>
               <Table
                 sx={{ minWidth: 750 }}
@@ -330,17 +353,18 @@ const isSelected = (name) => selected.indexOf(name) !== -1;
                   rowCount={rows.length}
                 />
                 <TableBody>
+
                   {visibleRows ? visibleRows.map((row, index) => {
-                    const isItemSelected = isSelected(row.name);
+                    const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.name)}
+                        onClick={(event) => handleClick(event, row.id)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.name}
+                        key={row.id}
                         selected={isItemSelected}
                       >
 
@@ -355,11 +379,11 @@ const isSelected = (name) => selected.indexOf(name) !== -1;
                         </TableCell>
                         <TableCell align="right">{row.name}</TableCell>
                         <TableCell align="right">{row.price}</TableCell>
-                        <TableCell align="right">{row.description}</TableCell>
                         <TableCell align="right">{row.quantity}</TableCell>
+                        <TableCell align="right">{row.description}</TableCell>
                       </TableRow>
                     );
-                  }) : null}
+                  }) : <div>loading...</div>}
                   {paddingHeight > 0 && (
                   <TableRow style={{ height: paddingHeight }}>
                     <TableCell colSpan={6} />
@@ -383,10 +407,11 @@ const isSelected = (name) => selected.indexOf(name) !== -1;
             control={<Switch checked={dense} onChange={handleChangeDense} />}
             label="Dense padding"
           />
-
+        
         </Box>
     </div>
   )
+
 }
 
-export default ListProduct
+export default ListProduct;
